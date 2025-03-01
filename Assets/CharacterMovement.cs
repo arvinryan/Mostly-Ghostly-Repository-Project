@@ -4,8 +4,10 @@ public class CharacterMovement : MonoBehaviour
 {
     public float speed;
     public float rotationSpeed;
+    public float jumpSpeed;
 
-    private CharacterController characterController; 
+    private CharacterController characterController;
+    private float ySpeed; 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,7 +25,17 @@ public class CharacterMovement : MonoBehaviour
         float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed;
         movementDirection.Normalize();
 
-        transform.Translate(movementDirection * magnitude * Time.deltaTime, Space.World);
+        if (Input.GetButtonDown("Jump"))
+        {
+            ySpeed = jumpSpeed;
+        }
+
+        Vector3 velocity = movementDirection * magnitude;
+        velocity.y = ySpeed;
+
+        characterController.Move(velocity * Time.deltaTime);
+
+        //transform.Translate(movementDirection * magnitude * Time.deltaTime, Space.World);
         //characterController.SimpleMove(movementDirection * magnitude);
 
         if (movementDirection != Vector3.zero)
